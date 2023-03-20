@@ -340,6 +340,90 @@ func pointersManipulation() {
 	fmt.Println("Done")
 }
 
+func maps() {
+	fmt.Println("This is how maps work in go:")
+	// var myMap map [keyType]valueType
+	// var heroes map[string]string
+	heroes := make(map[string]string)
+
+	heroes["Batman"] = "Bruce Wayne"
+	heroes["Superman"] = "Clark Kent"
+	heroes["The Flash"] = "Barry Allen"
+
+	villian := make(map[string]string)
+
+	villian["Lex Luther"] = "Lex Luther"
+	superPets := map[int]string{1: "Krypto", 2: "Bat Hound"}
+
+	fmt.Printf("Batman is %v and it's villian is %v\n", heroes["Batman"], villian["Lex Luther"])
+	fmt.Println("Chip", superPets[3])
+	_, ok := superPets[3]
+	fmt.Println("Is there a 3rd pet:", ok)
+
+	for k, v := range heroes {
+		fmt.Printf("%s is %s\n", k, v)
+	}
+	delete(heroes, "The Flash")
+	fmt.Println("The Flash does not exists enymore:", heroes["The Flash"])
+	fmt.Println("Text")
+}
+
+// * More about constrains in https://pkg.go.dev/golang.org/x/exp/constraints
+type MyContraint interface {
+	int | float64
+}
+
+func getSumGen[T MyContraint](x T, y T) T {
+	return x + y
+}
+
+func generics() {
+	fmt.Println("This is how generics work in go:")
+	fmt.Println("5 + 4 =", getSumGen(5, 4))
+	fmt.Println("5.1 + 3.9 =", getSumGen(5.1, 3.9))
+}
+
+type customer struct {
+	name    string
+	address string
+	bal     float64
+}
+
+func getCustomerInfo(c customer) {
+	fmt.Printf("%s owes us %.2f\n", c.name, c.bal)
+}
+
+func newCustomerAdd(c *customer, address string) {
+	c.address = address
+}
+
+type rectangle struct {
+	length, height float64
+}
+
+func (r rectangle) Area() float64 {
+	return r.length * r.height
+}
+
+func (r rectangle) Perimeter() float64 {
+	return (r.length + r.height) * 2
+}
+
+func structManupulation() {
+	var tS customer
+	tS.name = "Tom Smith"
+	tS.address = "5 main st"
+	tS.bal = 200.01
+
+	getCustomerInfo(tS)
+	newCustomerAdd(&tS, "10 South st")
+	fmt.Println("New Address is:", tS.address)
+
+	sS := customer{"Sally Smith", "12 main ave", 0.0}
+	getCustomerInfo(sS)
+	fmt.Println("Text")
+}
+
 func guessingGame() {
 	fmt.Println("This is a guessing game:")
 	seedSecs := time.Now().Unix()
@@ -370,6 +454,10 @@ func guessingGame() {
 }
 
 func main() {
+	maps()
+	generics()
+	structManupulation()
+
 	dataTypes()
 	casting()
 	ifConditional()
